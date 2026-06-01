@@ -2,6 +2,7 @@ const express = require('express');
 
 const UserController = require('../../controllers/user-controller');
 const authvalidator = require('../../validators/auth-validators');
+const authMiddleware = require('../../middlewares/auth-middleware');
 
 const router = express.Router();
 
@@ -17,6 +18,12 @@ router.post(
     '/signin',
     authvalidator.validateSignIn,
     (req, res) => userController.signIn(req, res)
+);
+
+router.get(
+    '/profile',
+    authMiddleware.isAuthenticated,
+    (req, res) => userController.getProfile(req, res)
 );
 
 module.exports = router;
