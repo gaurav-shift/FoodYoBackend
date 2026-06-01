@@ -4,7 +4,7 @@ const UserService = require('../services/user-service');
 const userService = new UserService();
 
 class UserController{
-    async signUp(req, res){
+    async signUp(req, res , next){
         try{
             const user = await userService.create({
                 name: req.body.name,
@@ -18,16 +18,12 @@ class UserController{
                 error: {}
             });
         }catch(err){
-            res.status(500).json({
-                success: false, 
-                data: {},
-                message: "Error in creating user",
-                error: err.message
-            });
+            next(err);
         }
-    }
+        }
+    
 
-    async signIn(req, res){
+    async signIn(req, res, next){
         try{
             const {email, password} = req.body;
             const user = await userService.signIn(email, password);
@@ -39,16 +35,11 @@ class UserController{
                 error: {}
             });
         }catch(err){ 
-            res.status(500).json({
-                success: false, 
-                message: "Error in signing in",
-                error: err.message,
-                data: {}
-            });
+            next(err);
         }   
     }
 
-    async getProfile(req, res){
+    async getProfile(req, res, next){
         try{
             const userId = req.user.userId;
             const user = await userService.getProfile(userId); 
@@ -59,12 +50,7 @@ class UserController{
                 error: {}
             });
         }catch(err){
-            res.status(500).json({
-                success: false, 
-                message: "Error in fetching user profile",
-                error: err.message,
-                data: {}
-            });
+            next(err);
         }
     }
 }

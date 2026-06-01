@@ -1,4 +1,6 @@
 const { body, validationResult } = require('express-validator');
+const AppError = require('../errors/app-error');
+const { StatusCodes } = require('http-status-codes');
 
 const validateSignUp = [
     body('name').notEmpty().isLength({ min: 3 , max: 50 }),

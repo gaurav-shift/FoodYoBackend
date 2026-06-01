@@ -5,6 +5,10 @@ const { PORT } = require('./config/serverConfig');
 const apiRoutes = require('./routes/index');
 const  connect  = require('./config/database');
 
+const errorHandler = require('./middlewares/error-handler');
+
+
+
 const setupAndStartServer = async () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -12,7 +16,8 @@ const setupAndStartServer = async () => {
     try{
     await connect();
     console.log('Connected to MongoDB');
-    app.use('/api', apiRoutes);    
+    app.use('/api', apiRoutes); 
+    app.use(errorHandler);   
     app.listen(PORT, async () => {
         console.log(`Server started on port ${PORT}`);
         

@@ -2,6 +2,8 @@ const UserRepository = require('../repositories/user-repository');
 const bcrypt  = require('bcrypt');
 const User = require('../models/user');
 const { generateToken } = require('../utils/jwt');
+const AppError = require('../errors/app-error');
+const { StatusCodes } = require('http-status-codes');
 
 class UserService{
     constructor(){
@@ -12,13 +14,18 @@ class UserService{
         try{
             const existingUser = await this.UserRepository.getByEmail(data.email);
             if(existingUser){
-                throw new Error('User with this email already exists');
+                throw new AppError('User already exists with this email', StatusCodes.CONFLICT);
             }
             const salt = await bcrypt.genSalt(10);
             data.password = await bcrypt.hash(data.password, salt);
 
             const user = await this.UserRepository.create(data);
-            return user;
+            const safeUser = {
+                id: user.id,
+                email: user.email,
+                name: user.name
+            }
+            return safeUser;
 
         }catch(err){
             console.log("Error in creating user:\n", err);
@@ -31,13 +38,13 @@ class UserService{
             const user = await this.UserRepository.getByEmail(email);
             if(!user){
                 console.log("User not found with this email");
-                throw new Error('User not found with this email');
+                throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
             }
             const passwordMatch = await this.checkPassword(plainpassword, user.password);
 
             if(!passwordMatch){
                 console.log("Password doesn't match");
-                throw new Error('Incorrect Password');
+                throw new AppError('Invalid email or password', StatusCodes.UNAUTHORIZED);
             }
             const payload = { userId: user.id};
             const token = generateToken(payload);
@@ -70,7 +77,7 @@ class UserService{
 
             if(!user) {
                 console.log("User not found with this id");
-                throw new Error('User not found with this id');
+                throw new AppError('User not found with this id', StatusCodes.NOT_FOUND);
             }
 
             const safeUser = {
