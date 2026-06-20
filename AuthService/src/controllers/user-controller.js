@@ -15,7 +15,7 @@ class UserController{
                 success: true,  
                 message: "User created successfully",
                 data: user,
-                error: {}
+                error: null
             });
         }catch(err){
             next(err);
@@ -32,7 +32,7 @@ class UserController{
                 success: true, 
                 message: "User signed in successfully",
                 data: user,
-                error: {}
+                error: null
             });
         }catch(err){ 
             next(err);
@@ -47,7 +47,7 @@ class UserController{
                 success: true, 
                 message: "User profile fetched successfully",
                 data: user,
-                error: {}
+                error: null
             });
         }catch(err){
             next(err);
