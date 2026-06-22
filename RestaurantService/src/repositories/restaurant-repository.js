@@ -29,6 +29,50 @@ class RestaurantRepository extends CrudRepository {
             throw error;
         }
     }
+    async searchRestaurants(city, search) {
+    try {
+        return await this.model.find({
+            city,
+            isOpen: true,
+            name: {
+                $regex: search,
+                $options: 'i'
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
+    async findRestaurants(filters) {
+    try {
+
+        const query = {
+            isOpen: true
+        };
+
+        if (filters.city) {
+            query.city = filters.city;
+        }
+
+        if (filters.search) {
+            query.name = {
+                $regex: filters.search,
+                $options: 'i'
+            };
+        }
+
+        if (filters.cuisine) {
+            query.cuisine = filters.cuisine;
+        }
+
+        return await this.model.find(query);
+
+    } catch (error) {
+        throw error;
+    }
+}
+    
 }
 
 module.exports = RestaurantRepository;

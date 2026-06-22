@@ -31,6 +31,41 @@ class RestaurantController {
             next(error);
         }
     }
+    async getAllRestaurants(req, res, next) {
+    try {
+
+        //const restaurants =
+            //await restaurantService.getAllRestaurants();
+        const restaurants = await restaurantService.findRestaurants(req.query);
+
+        return res.status(200).json({
+            success: true,
+            message: "Restaurants fetched successfully",
+            data: restaurants,
+            error: null
+        });
+        
+
+    } catch (error) {
+        next(error);
+    }
+    }
+    async getRestaurantById(req, res, next) {
+        try {
+            const restaurant =
+                await restaurantService.getRestaurantById(req.params.id);
+
+            return res.status(200).json({
+                success: true,
+                message: "Restaurant fetched successfully",
+                data: restaurant,
+                error: null
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 module.exports = RestaurantController;

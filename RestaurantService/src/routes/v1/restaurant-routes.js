@@ -14,4 +14,17 @@ router.post(
         restaurantController.createRestaurant(req, res, next)
 );
 
+router.get(
+    '/',
+    (req, res, next) =>
+        restaurantController.getAllRestaurants(req, res, next)
+);
+
+router.get(
+    '/:id',
+    restaurantValidator.validateRestaurantId,
+    (req, res, next) =>
+        restaurantController.getRestaurantById(req, res, next)
+);
+
 module.exports = router;
