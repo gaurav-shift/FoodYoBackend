@@ -2,10 +2,10 @@ const express = require('express');
 const app = express();
 
 const { PORT } = require('./config/serverConfig');
-//const apiRoutes = require('./routes/index');
+const apiRoutes = require('./routes/index');
 const  connect  = require('./config/database');
 
-//const errorHandler = require('./middlewares/error-handler');
+const errorHandler = require('./middlewares/error-handler');
 
 
 
@@ -16,8 +16,8 @@ const setupAndStartServer = async () => {
     try{
     await connect();
     console.log('Connected to MongoDB');
-   // app.use('/api', apiRoutes); 
-   // app.use(errorHandler);   
+    app.use('/api', apiRoutes); 
+    app.use(errorHandler);   
     app.listen(PORT, async () => {
         console.log(`Server started on port ${PORT}`);
         
