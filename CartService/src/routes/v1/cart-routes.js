@@ -1,0 +1,19 @@
+const express = require('express');
+
+const router = express.Router();
+
+const CartController = require('../../controllers/cart-controller');
+const { isAuthenticated } = require('../../middlewares/auth');
+const { validateAddToCart } = require('../../validators/cart-validator');
+
+const cartController = new CartController();
+
+router.post(
+    '/items',
+    isAuthenticated,
+    validateAddToCart,
+    (req, res, next) =>
+        cartController.addToCart(req, res, next)
+);
+
+module.exports = router;
