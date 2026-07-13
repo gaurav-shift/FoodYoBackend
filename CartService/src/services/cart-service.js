@@ -116,7 +116,7 @@ class CartService {
             );
         }
 
-        return cart;
+        return this.toSafeCart(cart);
 
     } catch (error) {
         throw error;
@@ -146,6 +146,20 @@ class CartService {
     return cart.items.findIndex(
         item => item.menuId.toString() === menuId.toString()
     );
+}
+
+    toSafeCart(cart) {
+    return {
+        id: cart.id,
+        userId: cart.userId,
+        restaurantId: cart.restaurantId,
+        restaurantName: cart.restaurantName,
+        items: cart.items,
+        subtotal: cart.subtotal,
+        deliveryFee: cart.deliveryFee,
+        tax: cart.tax,
+        totalAmount: cart.totalAmount
+    };
 }
 
 }
