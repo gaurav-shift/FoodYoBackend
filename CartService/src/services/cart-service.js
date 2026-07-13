@@ -102,6 +102,27 @@ class CartService {
     return cart;
 }
 
+
+    async getCart(userId) {
+
+    try {
+
+        const cart = await this.cartRepository.getCartByUserId(userId);
+
+        if (!cart) {
+            throw new AppError(
+                "Cart not found",
+                StatusCodes.NOT_FOUND
+            );
+        }
+
+        return cart;
+
+    } catch (error) {
+        throw error;
+    }
+}
+
     calculateTotals(cart) {
 
     const subtotal = cart.items.reduce((sum, item) => {

@@ -1,9 +1,12 @@
 const { StatusCodes } = require('http-status-codes');
 const CartService = require('../services/cart-service');
 
-const cartService = new CartService();
+
 
 class CartController {
+    constructor(){
+        this.cartService = new CartService();
+    }
 
     async addToCart(req, res, next) {
         try {
@@ -24,6 +27,26 @@ class CartController {
             next(error);
         }
     }
+
+    async getCart(req, res, next) {
+
+    try {
+
+        const cart = await this.cartService.getCart(
+            req.user.userId
+        );
+
+        return res.status(StatusCodes.OK).json({
+            success: true,
+            message: "Cart fetched successfully",
+            data: cart,
+            error: null
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
 
 }
 

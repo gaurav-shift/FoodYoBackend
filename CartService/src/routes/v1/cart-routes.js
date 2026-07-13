@@ -16,4 +16,11 @@ router.post(
         cartController.addToCart(req, res, next)
 );
 
+router.get(
+    '/',
+    isAuthenticated,
+    (req, res, next) =>
+        cartController.getCart(req, res, next)
+);
+
 module.exports = router;
