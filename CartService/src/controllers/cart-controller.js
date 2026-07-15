@@ -48,6 +48,31 @@ class CartController {
     }
 }
 
+
+    async updateQuantity(req, res, next) {
+
+    try {
+
+        const cart = await this.cartService.updateQuantity(
+            req.user.userId,
+            req.params.menuId,
+            req.body.quantity
+        );
+
+        return res.status(StatusCodes.OK).json({
+            success: true,
+            message: "Item quantity updated successfully",
+            data: cart,
+            error: null
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
 }
 
 module.exports = CartController;

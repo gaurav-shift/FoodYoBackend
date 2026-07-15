@@ -121,6 +121,41 @@ class CartService {
     } catch (error) {
         throw error;
     }
+}  
+
+
+    async updateQuantity(userId, menuId, quantity) {
+    try {
+
+        const cart = await this.cartRepository.getCartByUserId(userId);
+
+        if (!cart) {
+            throw new AppError(
+                "Cart not found",
+                StatusCodes.NOT_FOUND
+            );
+        }
+
+        const itemIndex = this.findItemIndex(cart, menuId);
+
+        if (itemIndex === -1) {
+            throw new AppError(
+                "Item not found in cart",
+                StatusCodes.NOT_FOUND
+            );
+        }
+
+        cart.items[itemIndex].quantity = quantity;
+
+        this.calculateTotals(cart);
+
+        await cart.save();
+
+        return this.toSafeCart(cart);
+
+    } catch (error) {
+        throw error;
+    }
 }
 
     calculateTotals(cart) {
