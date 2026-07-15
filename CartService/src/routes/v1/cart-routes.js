@@ -6,6 +6,7 @@ const CartController = require('../../controllers/cart-controller');
 const { isAuthenticated } = require('../../middlewares/auth');
 const { validateAddToCart } = require('../../validators/cart-validator');
 const {validateUpdateQuantity} = require('../../validators/cart-validator');
+const {validateRemoveCartItem} = require('../../validators/cart-validator');
 
 const cartController = new CartController();
 
@@ -30,6 +31,14 @@ router.patch(
     validateUpdateQuantity,
     (req, res, next) =>
         cartController.updateQuantity(req, res, next)
+);
+
+router.delete(
+    '/items/:menuId',
+    isAuthenticated,
+    validateRemoveCartItem,
+    (req, res, next) =>
+        cartController.removeItem(req, res, next)
 );
 
 module.exports = router;

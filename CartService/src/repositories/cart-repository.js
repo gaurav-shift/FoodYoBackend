@@ -15,6 +15,16 @@ class CartRepository extends CrudRepository {
         }
     }
 
+    async deleteCartByUserId(userId) {
+    try {
+        return await this.model.findOneAndDelete({ userId });
+    } catch (error) {
+        throw error;
+    }
 }
+
+}
+
+    
 
 module.exports = CartRepository;

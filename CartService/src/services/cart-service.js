@@ -158,6 +158,50 @@ class CartService {
     }
 }
 
+
+    async removeItem(userId, menuId) {
+
+    try {
+
+        const cart = await this.cartRepository.getCartByUserId(userId);
+
+        if (!cart) {
+            throw new AppError(
+                "Cart not found",
+                StatusCodes.NOT_FOUND
+            );
+        }
+
+        const itemIndex = this.findItemIndex(cart, menuId);
+
+        if (itemIndex === -1) {
+            throw new AppError(
+                "Item not found in cart",
+                StatusCodes.NOT_FOUND
+            );
+        }
+
+        cart.items.splice(itemIndex, 1);
+
+        if (cart.items.length === 0) {
+
+            await this.cartRepository.deleteCartByUserId(userId);
+
+            return null;
+        }
+
+        this.calculateTotals(cart);
+
+        await cart.save();
+
+        return this.toSafeCart(cart);
+
+    } catch (error) {
+        throw error;
+    }
+}   
+
+
     calculateTotals(cart) {
 
     const subtotal = cart.items.reduce((sum, item) => {

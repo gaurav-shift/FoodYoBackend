@@ -71,6 +71,27 @@ class CartController {
     }
 }
 
+    async removeItem(req, res, next) {
+
+    try {
+
+        const cart = await this.cartService.removeItem(
+            req.user.userId,
+            req.params.menuId
+        );
+
+        return res.status(StatusCodes.OK).json({
+            success: true,
+            message: "Item removed successfully",
+            data: cart,
+            error: null
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 
 }
